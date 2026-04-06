@@ -1,0 +1,45 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 02.04.2026 18:15:21
+// Design Name: 
+// Module Name: trivium_driver
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+module trivium_driver (
+    input        clk,
+    input        rst_n,
+    input [79:0] key_in,
+    input [79:0] iv_in,        // << external IV added
+    input        init,
+    input        done,
+    input        plain_txt,
+    output       cipher_txt
+);
+    trivium_integrated driv_intg (
+        .clk         (clk),
+        .plain_txt   (plain_txt),
+        .rst_n       (rst_n),
+        .key_in      (key_in),
+        .iv_in       (iv_in),      // << wired through
+        .init        (init),
+        .done        (done),
+        .key         (),
+        .valid       (),
+        .cipher_text (cipher_txt),
+        .iv_out      ()
+    );
+endmodule
