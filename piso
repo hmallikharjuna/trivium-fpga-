@@ -1,0 +1,44 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 02.04.2026 18:12:05
+// Design Name: 
+// Module Name: piso
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+module piso #(
+    parameter data_width = 4
+)(
+    input                      clk,
+    input                      rst_n,
+    input                      mode,     // 1=parallel load, 0=shift
+    input   [data_width-1:0]   d_in,     // parallel data
+    input                      s_in,     // serial feedback at LSB
+    output wire                   d_out,    // MSB shifts out
+    output wire [data_width-1:0]   q         // full state for tapping
+);
+    reg [data_width-1:0] temp;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n)
+            temp <= {data_width{1'b0}};
+        else if (mode)
+            temp <= d_in;                           // parallel load
+        else
+            temp <= {temp[data_width-2:0], s_in};   // left-shift, feedback at LSB
+    end
+    assign d_out = temp[data_width-1];
+    assign q     = temp;
+endmodule
