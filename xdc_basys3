@@ -1,0 +1,25 @@
+## Clock - 100MHz on W5 (Basys3, NOT E3 which is Arty)
+set_property -dict { PACKAGE_PIN W5   IOSTANDARD LVCMOS33 } [get_ports { clk }];
+#create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports { clk }];
+
+## plain_txt → sw[0]
+set_property -dict { PACKAGE_PIN V17  IOSTANDARD LVCMOS33 } [get_ports { plain_txt }];
+
+## cipher_txt → led[0]  (only output)
+set_property -dict { PACKAGE_PIN U16  IOSTANDARD LVCMOS33 } [get_ports { cipher_txt }];
+
+## rst_n → btnC (center button, active-low)
+set_property -dict { PACKAGE_PIN U18  IOSTANDARD LVCMOS33 } [get_ports { rst_n }];
+
+## init → btnU (up button)
+set_property -dict { PACKAGE_PIN T18  IOSTANDARD LVCMOS33 } [get_ports { init }];
+
+## done → btnR (right button)
+set_property -dict { PACKAGE_PIN T17  IOSTANDARD LVCMOS33 } [get_ports { done }];
+
+### Configuration - leave these always active, Basys3 requires them
+#set_property CONFIG_VOLTAGE 3.3 [current_design]
+#set_property CFGBVS VCCO [current_design]
+#set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
+#set_property BITSTREAM.CONFIG.CONFIGRATE 33 [current_design]
+#set_property CONFIG_MODE SPIx4 [current_design]
