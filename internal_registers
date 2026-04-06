@@ -1,0 +1,66 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 02.04.2026 18:12:42
+// Design Name: 
+// Module Name: internal_registers
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+module internal_registers (
+    input           clk,
+    input           rst_n,
+    input           mode,       // 1=load, 0=shift
+    input   [287:0] d_in,       // packed initial state
+    // serial feedback inputs (from FSM cross-feedback t3, t1, t2)
+    input           fb_a,       // t3 -> regA[0]
+    input         fb_b,       // t1 -> regB[0]
+    input           fb_c,       // t2 -> regC[0]
+    // full register state (for tap access)
+    output  [92:0]  regA,
+    output  [83:0]  regB,
+    output  [110:0] regC
+);
+    // Register A - 93 bits
+    piso #(.data_width(93)) reg_a (
+        .clk   (clk),
+        .rst_n (rst_n),
+        .mode  (mode),
+        .d_in  (d_in[92:0]),
+        .s_in  (fb_a),
+        .d_out (),
+        .q     (regA)
+    );
+    // Register B - 84 bits
+    piso #(.data_width(84)) reg_b (
+        .clk   (clk),
+        .rst_n (rst_n),
+        .mode  (mode),
+        .d_in  (d_in[176:93]),
+        .s_in  (fb_b),
+        .d_out (),
+        .q     (regB)
+    );
+    // Register C - 111 bits
+    piso #(.data_width(111)) reg_c (
+        .clk   (clk),
+        .rst_n (rst_n),
+        .mode  (mode),
+        .d_in  (d_in[287:177]),
+        .s_in  (fb_c),
+        .d_out (),
+        .q     (regC)
+    );
+endmodule
