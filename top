@@ -1,0 +1,48 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 06.04.2026 14:09:12
+// Design Name: 
+// Module Name: top
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+module top(
+    input clk,    // Clock
+    input rst_n,  // Asynchronous reset active low
+    input init,
+    input done,
+    output cipher_txt,
+    input plain_txt
+    
+);
+
+wire  [79:0] key_temp;
+wire  [79:0] iv_temp;
+
+ trivium_driver dutt (
+    .clk(clk),
+    .rst_n(rst_n),
+    .key_in(key_temp),
+    .iv_in(iv_temp),        // << external IV added
+    .init(init),
+    .done(done),
+    .plain_txt(plain_txt),
+    .cipher_txt(cipher_txt)
+);
+
+assign key_temp=80'b0;
+assign iv_temp=80'b0;
+endmodule 
